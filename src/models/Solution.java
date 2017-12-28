@@ -25,7 +25,7 @@ public class Solution {
         return id;
     }
 
-    private Solution setId(int id) {
+    public Solution setId(int id) {
         this.id = id;
         return this;
     }
@@ -61,7 +61,7 @@ public class Solution {
         return exercise_id;
     }
 
-    private Solution setExercise_id(int exercise_id) {
+    public Solution setExercise_id(int exercise_id) {
         this.exercise_id = exercise_id;
         return this;
     }
@@ -70,7 +70,7 @@ public class Solution {
         return user_id;
     }
 
-    private Solution setUser_id(int user_id) {
+    public Solution setUser_id(int user_id) {
         this.user_id = user_id;
         return this;
     }
@@ -92,6 +92,32 @@ public class Solution {
             return loadedSolution;
         }
         return null;
+    }
+
+    static public Solution[] loadAllByExerciseId(Connection conn, int exercise_id) throws SQLException {
+
+        ArrayList<Solution> solutionsList = new ArrayList<>();
+        PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM Solution WHERE exercise_id = ? ORDER BY updated DESC;");
+        preparedStatement.setInt(1, exercise_id);
+        ResultSet solution = preparedStatement.executeQuery();
+
+        while (solution.next()) {
+            Solution loadedSolution = new Solution();
+            loadedSolution.id = solution.getInt("id");
+            loadedSolution.created = solution.getDate("created");
+            loadedSolution.updated = solution.getDate("updated");
+            loadedSolution.description = solution.getString("description");
+            loadedSolution.exercise_id = exercise_id;
+            loadedSolution.user_id = solution.getInt("users_id");
+
+            solutionsList.add(loadedSolution);
+        }
+
+        Solution[] solutionsArray = new Solution[solutionsList.size()];
+        solutionsArray = solutionsList.toArray(solutionsArray);
+
+        return solutionsArray;
+
     }
 
     static public Solution[] loadAll(Connection conn) throws SQLException {

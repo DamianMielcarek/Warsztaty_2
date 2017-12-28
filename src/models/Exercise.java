@@ -59,6 +59,32 @@ public class Exercise {
         return null;
     }
 
+    static public Solution[] loadAllByUserId(Connection conn, int users_id) throws SQLException {
+
+        ArrayList<Solution> solutionsList = new ArrayList<>();
+        PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM Solution WHERE users_id = ?;");
+        preparedStatement.setInt(1, users_id);
+        ResultSet solution = preparedStatement.executeQuery();
+
+        while (solution.next()) {
+            Solution loadedSolution = new Solution();
+            loadedSolution.setId(solution.getInt("id"));
+            loadedSolution.setCreated(solution.getDate("created"));
+            loadedSolution.setUpdated(solution.getDate("updated"));
+            loadedSolution.setDescription(solution.getString("description"));
+            loadedSolution.setExercise_id(solution.getInt("exercise_id"));
+            loadedSolution.setUser_id(users_id);
+
+            solutionsList.add(loadedSolution);
+        }
+
+        Solution[] solutionsArray = new Solution[solutionsList.size()];
+        solutionsArray = solutionsList.toArray(solutionsArray);
+
+        return solutionsArray;
+
+    }
+
     static public Exercise[] loadAll(Connection conn) throws SQLException {
 
         ArrayList<Exercise> exercisesList = new ArrayList<>();
