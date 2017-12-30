@@ -88,6 +88,10 @@ public class UsersManagement {
                     }
                 } else if (choose.equals("delete")) {
                     System.out.println("Type id for user You want to delete:");
+                    while ( !scanner.hasNextInt() ) {
+                        System.err.println("id must be a number. Please type a number:");
+                        scanner.next();
+                    }
                     int id = scanner.nextInt();
                     User user = User.loadUserById(conn, id);
 
