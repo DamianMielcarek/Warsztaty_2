@@ -10,7 +10,7 @@ public class ExercisesManagement {
     public static void main(String[] args) {
 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/warsztaty_2?useSSL=false", "root", "password")) {
-
+            Scanner scanner = new Scanner(System.in);
             boolean run = true;
             while (run) {
                 System.out.println("Exercises:");
@@ -25,7 +25,6 @@ public class ExercisesManagement {
                 System.out.println("  delete  - deleting exercise");
                 System.out.println("  quit    - end program");
 
-                Scanner scanner = new Scanner(System.in);
                 String choose = scanner.nextLine();
                 if (choose.equals("quit")) {
                     run = false;

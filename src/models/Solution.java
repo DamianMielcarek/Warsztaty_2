@@ -1,24 +1,24 @@
 package models;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Solution {
 
     private int id;
-    private Date created;
-    private Date updated;
+    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime updated;
     private String description;
     private int exercise_id;
-    private int user_id;
+    private int users_id;
 
     public Solution() {}
 
-    public Solution(Date created, Date updated, String description) {
-        this.created = created;
-        this.updated = updated;
-        this.description = description;
+    public Solution(int exercise_id, int users_id) {
+        this.exercise_id = exercise_id;
+        this.users_id = users_id;
     }
 
     public int getId() {
@@ -30,20 +30,28 @@ public class Solution {
         return this;
     }
 
-    public Date getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public Solution setCreated(Date created) {
+    public Solution setCreated(String str) {
+        String[] split = str.split("\\.");
+        String dateTime = split[0];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime created = LocalDateTime.parse(dateTime, formatter);
         this.created = created;
         return this;
     }
 
-    public Date getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public Solution setUpdated(Date updated) {
+    public Solution setUpdated(String str) {
+        String[] split = str.split("\\.");
+        String dateTime = split[0];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime updated = LocalDateTime.parse(dateTime, formatter);
         this.updated = updated;
         return this;
     }
@@ -66,12 +74,12 @@ public class Solution {
         return this;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUsers_id() {
+        return users_id;
     }
 
-    public Solution setUser_id(int user_id) {
-        this.user_id = user_id;
+    public Solution setUsers_id(int user_id) {
+        this.users_id = user_id;
         return this;
     }
 
@@ -84,11 +92,11 @@ public class Solution {
         if (resultSet.next()) {
             Solution loadedSolution = new Solution();
             loadedSolution.id = resultSet.getInt("id");
-            loadedSolution.created = resultSet.getDate("created");
-            loadedSolution.updated = resultSet.getDate("updated");
+            loadedSolution.created = (LocalDateTime) resultSet.getObject("created");
+            loadedSolution.updated = (LocalDateTime) resultSet.getObject("updated");
             loadedSolution.description = resultSet.getString("description");
             loadedSolution.exercise_id = resultSet.getInt("exercise_id");
-            loadedSolution.user_id = resultSet.getInt("user_id");
+            loadedSolution.users_id = resultSet.getInt("users_id");
             return loadedSolution;
         }
         return null;
@@ -104,11 +112,11 @@ public class Solution {
         while (solution.next()) {
             Solution loadedSolution = new Solution();
             loadedSolution.id = solution.getInt("id");
-            loadedSolution.created = solution.getDate("created");
-            loadedSolution.updated = solution.getDate("updated");
+            loadedSolution.created = (LocalDateTime) solution.getObject("created");
+            loadedSolution.updated = (LocalDateTime) solution.getObject("updated");
             loadedSolution.description = solution.getString("description");
             loadedSolution.exercise_id = exercise_id;
-            loadedSolution.user_id = solution.getInt("users_id");
+            loadedSolution.users_id = solution.getInt("users_id");
 
             solutionsList.add(loadedSolution);
         }
@@ -130,11 +138,11 @@ public class Solution {
         while (resultSet.next()) {
             Solution loadedSolution = new Solution();
             loadedSolution.id = resultSet.getInt("id");
-            loadedSolution.created = resultSet.getDate("created");
-            loadedSolution.updated = resultSet.getDate("updated");
+            loadedSolution.created = (LocalDateTime) resultSet.getObject("created");
+            loadedSolution.updated = (LocalDateTime) resultSet.getObject("updated");
             loadedSolution.description = resultSet.getString("description");
             loadedSolution.exercise_id = resultSet.getInt("exercise_id");
-            loadedSolution.user_id = resultSet.getInt("user_id");
+            loadedSolution.users_id = resultSet.getInt("users_id");
 
             solutionsList.add(loadedSolution);
         }
@@ -148,16 +156,14 @@ public class Solution {
 
     public Solution saveToDB(Connection conn) throws SQLException, NullPointerException {
         if ( this.getId() == 0 ) {
-            String sql = "INSERT INTO Solution (created, updated, description) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Solution (created, exercise_id, users_id) VALUES (?, ?, ?)";
             String[] generatedColumns = {"ID"};
 
             PreparedStatement preparedStatement;
             preparedStatement = conn.prepareStatement(sql, generatedColumns);
-            Object param1 = new Timestamp(this.created.getTime());
-            preparedStatement.setObject(1, param1);
-            Object param2 = new Timestamp(this.updated.getTime());
-            preparedStatement.setObject(2, param2);
-            preparedStatement.setString(3, this.description);
+            preparedStatement.setString(1, String.valueOf(this.created));
+            preparedStatement.setInt(2, this.exercise_id);
+            preparedStatement.setInt(3, this.users_id);
 
             preparedStatement.executeUpdate();
 
@@ -166,16 +172,16 @@ public class Solution {
                 this.setId(rs.getInt(1));
             }
         } else {
-            String sql = "UPDATE Solution SET created = ?, updated = ?, description = ? WHERE id = ?";
+            String sql = "UPDATE Solution SET created = ?, updated = ?, description = ?, exercise_id = ?, users_id = ? WHERE id = ?";
 
             PreparedStatement preparedStatement;
             preparedStatement = conn.prepareStatement(sql);
-            Object param1 = new Timestamp(this.created.getTime());
-            preparedStatement.setObject(1, param1);
-            Object param2 = new Timestamp(this.updated.getTime());
-            preparedStatement.setObject(2, param2);
+            preparedStatement.setString(1, String.valueOf(this.created));
+            preparedStatement.setString(2, String.valueOf(this.updated));
             preparedStatement.setString(3, this.description);
-            preparedStatement.setInt(4, this.id);
+            preparedStatement.setInt(4, this.exercise_id);
+            preparedStatement.setInt(5, this.users_id);
+            preparedStatement.setInt(6, this.id);
 
             preparedStatement.executeUpdate();
         }
@@ -202,7 +208,7 @@ public class Solution {
                 .append(this.getUpdated()).append(" ")
                 .append(this.getDescription()).append(" ")
                 .append(this.getExercise_id()).append(" ")
-                .append(this.getUser_id());
+                .append(this.getUsers_id());
         return sb.toString();
     }
 

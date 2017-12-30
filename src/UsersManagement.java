@@ -10,7 +10,7 @@ public class UsersManagement {
     public static void main(String[] args) {
 
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/warsztaty_2?useSSL=false", "root", "password")) {
-
+            Scanner scanner = new Scanner(System.in);
             boolean run = true;
             while (run) {
                 System.out.println("Users:");
@@ -25,7 +25,6 @@ public class UsersManagement {
                 System.out.println("  delete  - deleting user");
                 System.out.println("  quit    - end program");
 
-                Scanner scanner = new Scanner(System.in);
                 String choose = scanner.nextLine();
                 if (choose.equals("quit")) {
                     run = false;
