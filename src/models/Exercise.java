@@ -152,9 +152,6 @@ public class Exercise {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        sb.append(this.getTitle());
-//        sb.append(this.getTitle()).append(" ").append(this.getDescription());
-//        sb.append(this.getId()).append(" ").append(this.getTitle());
         sb.append(this.getId()).append(" ")
                 .append(this.getTitle()).append(" ")
                 .append(this.getDescription());

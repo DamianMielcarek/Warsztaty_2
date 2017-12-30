@@ -197,9 +197,6 @@ public class Solution {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        sb.append(this.getCreated()).append(" ").append(this.getUpdated());
-//        sb.append(this.getCreated()).append(" ").append(this.getUpdated()).append(" ").append(this.getDescription());
-//        sb.append(this.getId()).append(" ").append(this.getCreated()).append(" ").append(this.getUpdated()).append(" ").append(this.getDescription());
         sb.append(this.getId()).append(" ")
                 .append(this.getCreated()).append(" ")
                 .append(this.getUpdated()).append(" ")

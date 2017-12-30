@@ -15,10 +15,11 @@ public class User {
 
     public User() {}
 
-    public User(String username, String password, String email) {
+    public User(String username, String email, String password, int user_group_id) {
         setUsername(username);
-        setPassword(password);
         setEmail(email);
+        setPassword(password);
+        setUser_group_id(user_group_id);
     }
 
     public int getId() {
@@ -136,7 +137,7 @@ public class User {
 
     public User saveToDB(Connection conn) throws SQLException, NullPointerException {
         if ( this.getId() == 0 ) {
-            String sql = "INSERT INTO Users (username, email, password) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Users (username, email, password, user_group_id) VALUES (?, ?, ?, ?)";
             String[] generatedColumns = {"ID"};
 
             PreparedStatement preparedStatement;
@@ -144,6 +145,7 @@ public class User {
             preparedStatement.setString(1, this.username);
             preparedStatement.setString(2, this.email);
             preparedStatement.setString(3, this.password);
+            preparedStatement.setInt(4, this.user_group_id);
 
             preparedStatement.executeUpdate();
 
@@ -152,14 +154,15 @@ public class User {
                 this.setId(rs.getInt(1));
             }
         } else {
-            String sql = "UPDATE Users SET username = ?, email = ?, password = ? WHERE id = ?";
+            String sql = "UPDATE Users SET username = ?, email = ?, password = ?, user_group_id = ? WHERE id = ?";
 
             PreparedStatement preparedStatement;
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, this.username);
             preparedStatement.setString(2, this.email);
             preparedStatement.setString(3, this.password);
-            preparedStatement.setInt(4, this.id);
+            preparedStatement.setInt(4, this.user_group_id);
+            preparedStatement.setInt(5, this.id);
 
             preparedStatement.executeUpdate();
         }
@@ -180,8 +183,6 @@ public class User {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        sb.append(this.getUsername()).append(" ").append( this.getEmail() );
-//        sb.append(this.getId()).append(" ").append(this.getUsername()).append(" ").append( this.getEmail() );
         sb.append(this.getId()).append(" ")
                 .append(this.getUsername()).append(" ")
                 .append(this.getEmail()).append(" ")

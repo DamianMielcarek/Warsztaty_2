@@ -72,26 +72,14 @@ public class Group {
 
     public Group saveToDB(Connection conn) throws SQLException, NullPointerException {
         if ( this.getId() == 0 ) {
-            String sql = "INSERT INTO User_group (name) VALUES (?)";
-            String[] generatedColumns = {"ID"};
-
-            PreparedStatement preparedStatement;
-            preparedStatement = conn.prepareStatement(sql, generatedColumns);
-            preparedStatement.setString(1, this.name);
-
-            preparedStatement.executeUpdate();
-
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if (rs.next()) {
-                this.setId(rs.getInt(1));
-            }
+            System.err.println("Id can't be 0");
         } else {
-            String sql = "UPDATE User_group SET name = ? WHERE id = ?";
+            String sql = "INSERT INTO User_group (id, name) VALUES (?, ?);";
 
             PreparedStatement preparedStatement;
             preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, this.name);
-            preparedStatement.setInt(2, this.id);
+            preparedStatement.setInt(1, this.id);
+            preparedStatement.setString(2, this.name);
 
             preparedStatement.executeUpdate();
         }
@@ -112,7 +100,6 @@ public class Group {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        sb.append(this.getName());
         sb.append(this.getId()).append(" ").append(this.getName());
         return sb.toString();
     }
