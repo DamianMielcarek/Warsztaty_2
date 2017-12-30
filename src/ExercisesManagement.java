@@ -16,8 +16,8 @@ public class ExercisesManagement {
                 System.out.println("Exercises:");
                 System.out.println("id title description");
                 Exercise[] exercises = Exercise.loadAll(conn);
-                for (Exercise u : exercises) {
-                    System.out.println( u.toString() );
+                for (Exercise e : exercises) {
+                    System.out.println( e.toString() );
                 }
                 System.out.println("Choose one option:");
                 System.out.println("  add     - adding exercise");

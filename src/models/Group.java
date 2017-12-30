@@ -10,8 +10,7 @@ public class Group {
 
     public Group() {}
 
-    public Group(int id, String name) {
-        this.id = id;
+    public Group(String name) {
         this.name = name;
     }
 
@@ -72,14 +71,26 @@ public class Group {
 
     public Group saveToDB(Connection conn) throws SQLException, NullPointerException {
         if ( this.getId() == 0 ) {
-            System.err.println("Id can't be 0");
+            String sql = "INSERT INTO User_group (name) VALUES (?)";
+            String[] generatedColumns = {"ID"};
+
+            PreparedStatement preparedStatement;
+            preparedStatement = conn.prepareStatement(sql, generatedColumns);
+            preparedStatement.setString(1, this.name);
+
+            preparedStatement.executeUpdate();
+
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if (rs.next()) {
+                this.setId(rs.getInt(1));
+            }
         } else {
-            String sql = "INSERT INTO User_group (id, name) VALUES (?, ?);";
+            String sql = "UPDATE User_group SET name = ? WHERE id = ?";
 
             PreparedStatement preparedStatement;
             preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setInt(1, this.id);
-            preparedStatement.setString(2, this.name);
+            preparedStatement.setString(1, this.name);
+            preparedStatement.setInt(2, this.id);
 
             preparedStatement.executeUpdate();
         }
