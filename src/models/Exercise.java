@@ -62,10 +62,9 @@ public class Exercise {
     static public Solution[] loadAllByUserId(Connection conn, int users_id) throws SQLException {
 
         ArrayList<Solution> solutionsList = new ArrayList<>();
-        ResultSet solution = null;
         PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM Solution WHERE users_id = ?;");
         preparedStatement.setInt(1, users_id);
-        solution = preparedStatement.executeQuery();
+        ResultSet solution = preparedStatement.executeQuery();
         while (solution.next()) {
             Solution loadedSolution = new Solution();
             loadedSolution.setId(solution.getInt("id"));
