@@ -83,6 +83,29 @@ public class Exercise {
 
     }
 
+    static public Exercise[] loadUnsolvedByUserId(Connection conn, int users_id) throws SQLException {
+
+        ArrayList<Exercise> exercisesList = new ArrayList<>();
+        String sql = "SELECT * FROM Exercise AS e LEFT JOIN Solution AS s ON e.id=s.exercise_id WHERE s.users_id = ? AND s.description IS NULL;";
+        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+        preparedStatement.setInt(1, users_id);
+        ResultSet exercise = preparedStatement.executeQuery();
+        while (exercise.next()) {
+            Exercise loadedExercise = new Exercise();
+            loadedExercise.setId(exercise.getInt("id"));
+            loadedExercise.setTitle(exercise.getString("title"));
+            loadedExercise.setDescription(exercise.getString("description"));
+
+            exercisesList.add(loadedExercise);
+        }
+
+        Exercise[] exercisesArray = new Exercise[exercisesList.size()];
+        exercisesArray = exercisesList.toArray(exercisesArray);
+
+        return exercisesArray;
+
+    }
+
     static public Exercise[] loadAll(Connection conn) throws SQLException {
 
         ArrayList<Exercise> exercisesList = new ArrayList<>();

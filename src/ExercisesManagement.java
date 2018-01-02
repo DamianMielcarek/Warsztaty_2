@@ -89,7 +89,7 @@ public class ExercisesManagement {
             }
 
         } catch (Exception e) {
-            System.err.println("Connecting to database failed. Possible cause: wrong database name, wrong user or password to database or wrong port number. May be also: mysql not installed, no jdbc library in project (mysql-connector-java-5.1.45-bin or above needed)");
+            System.err.println("Database connection failed. Possible cause: wrong database name, wrong user or password to database or wrong port number. May be also: mysql not installed, no jdbc library in project (mysql-connector-java-5.1.45-bin or above needed) or another unexpected cause.");
         }
 
     }

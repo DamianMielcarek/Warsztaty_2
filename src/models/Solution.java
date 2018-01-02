@@ -9,7 +9,7 @@ public class Solution {
 
     private int id;
     private LocalDateTime created = LocalDateTime.now();
-    private LocalDateTime updated;
+    private LocalDateTime updated = LocalDateTime.now();
     private String description;
     private int exercise_id;
     private int users_id;
@@ -152,6 +152,27 @@ public class Solution {
 
         return solutionsArray;
 
+    }
+
+    public Solution saveSolutionToDB(Connection conn) throws SQLException, NullPointerException {
+        String sql = "UPDATE Solution SET updated = ?, description = ? WHERE exercise_id = ? AND users_id = ? AND description IS NULL";
+
+        PreparedStatement preparedStatement;
+        preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, String.valueOf(this.updated));
+        preparedStatement.setString(2, this.description);
+        preparedStatement.setInt(3, this.exercise_id);
+        preparedStatement.setInt(4, this.users_id);
+
+        int affectedRows = preparedStatement.executeUpdate();
+
+        if (affectedRows == 0) {
+            System.err.println("Nothing changed in database. Solution for this user and entered exercise has been added previously.");
+        } else {
+            System.out.println("Thank You. Your solution has been successfully saved to database.");
+        }
+
+        return this;
     }
 
     public Solution saveToDB(Connection conn) throws SQLException, NullPointerException {
