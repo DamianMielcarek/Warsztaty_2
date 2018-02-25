@@ -1,4 +1,4 @@
-# Warsztaty_2
+# Workshop_2
 
 Programming school - console Java application contains different programs using MySQL database and Active Record design pattern.
 
